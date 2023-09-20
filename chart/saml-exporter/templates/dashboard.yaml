@@ -1,0 +1,27 @@
+{{- if .Values.grafanaDashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "saml-exporter.fullname" . }}-dashboard
+  {{- if or .Values.labels .Values.grafanaDashboard.labels }}
+  labels:
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.grafanaDashboard.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}  
+  {{- if or .Values.annotations .Values.grafanaDashboard.annotations }}
+  annotations:
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.grafanaDashboard.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}  
+data:
+  {{- $fileName := printf "dashboard.json" (include "saml-exporter.fullname" .) }}
+  {{- ($.Files.Glob (printf $fileName)).AsConfig | nindent 2 }}
+{{- end -}}

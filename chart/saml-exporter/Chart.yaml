@@ -1,0 +1,17 @@
+apiVersion: v2
+appVersion: 0.0.0
+description: A Prometheus exporter for SAML metadata
+home: https://github.com/doodlescheduling/saml-exporter
+maintainers:
+- name: raffis
+  email: devops@doodle.com
+keywords:
+- exporter
+- metrics
+- saml
+- prometheus
+- x509-certificates
+name: saml-exporter
+sources:
+- https://github.com/doodlescheduling/saml-exporter
+version: 0.0.0

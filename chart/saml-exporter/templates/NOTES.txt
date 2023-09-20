@@ -1,0 +1,5 @@
+saml-exporter was successfully deployed.
+
+You may test the exporter using:
+kubectl -n {{.Release.Namespace}} port-forward deployment/{{.Release.Name}} {{.Values.port}}  &
+curl localhost:{{.Values.port}}/metrics

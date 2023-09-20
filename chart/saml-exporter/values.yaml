@@ -1,0 +1,154 @@
+# Whitespace delimted list of http URL to SAML endpoints
+samlMetadataURL:
+
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/doodlescheduling/saml-exporter
+  tag:
+
+affinity: {}
+
+topologySpreadConstraints: []
+
+chartLabels: true
+
+labels: {}
+
+annotations: {}
+
+extraArgs:
+
+fullnameOverride: ""
+
+imagePullSecrets: []
+
+livenessProbe:
+  httpGet:
+    path: /healthz
+    port: metrics
+  initialDelaySeconds: 10
+
+nameOverride: ""
+
+nodeSelector: {}
+
+# A list of additional volumes
+additionalVolumes: []
+
+# Add additional containers (sidecars)
+extraContainers: []
+
+podAnnotations: {}
+#  prometheus.io/scrape: "true"
+#  prometheus.io/port: "metrics"
+
+port: "9412"
+
+# Change the metrics path
+metricsPath: /metrics
+
+priorityClassName: ""
+
+readinessProbe:
+  httpGet:
+    path: /healthz
+    port: metrics
+  initialDelaySeconds: 10
+
+replicas: 1
+
+resources: {}
+# limits:
+#   cpu: 250m
+#   memory: 192Mi
+# requests:
+#   cpu: 100m
+#   memory: 128Mi
+
+# Extra environment variables that will be passed into the exporter pod
+env: {}
+
+## The name of a secret in the same kubernetes namespace which contain values to be added to the environment
+## This can be useful for auth tokens, etc
+envFromSecret: ""
+
+## A list of environment variables from secret refs that will be passed into the exporter pod
+## example:
+## extraEnvSecrets:
+##   MY_ENV:
+##     secret: my-secret
+##     key: password
+extraEnvSecrets: {}
+
+## A list of environment variables from fieldPath refs that will expose pod information to the container
+## This can be useful for enriching the custom metrics with pod information
+## example:
+## extraEnvFieldPath:
+##   POD_NAME: metadata.name
+extraEnvFieldPath: {}
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["all"]
+  readOnlyRootFilesystem: true
+  runAsGroup: 10000
+  runAsNonRoot: true
+  runAsUser: 10000
+
+service:
+  enabled: false
+  labels: {}
+  annotations: {}
+  port: 9412
+  type: ClusterIP
+
+serviceAccount:
+  create: true
+  labels: {}
+  anntations: {}
+  # If create is true and name is not set, then a name is generated using the
+  # fullname template.
+  name:
+
+# Prometheus operator ServiceMonitor
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  namespace:
+  labels: {}
+  anntations: {}
+  targetLabels: []
+  metricRelabelings: []
+  sampleLimit: 0
+
+# Prometheus operator PodMonitor
+podMonitor:
+  enabled: false
+  interval: 30s
+  scrapeTimeout: 10s
+  namespace:
+  labels: {}
+  anntations: {}
+  targetLabels: []
+  metricRelabelings: []
+  sampleLimit: 0
+
+prometheusRule:
+  ## If true, a PrometheusRule CRD is created for a prometheus operator
+  ## https://github.com/coreos/prometheus-operator
+  ##
+  ## The rules will be processed as Helm template, allowing to set variables in them.
+  enabled: false
+  #  namespace: monitoring
+  labels: {}
+  rules: []
+
+tolerations: []
+
+grafanaDashboard:
+  enabled: true
+  labels:
+    grafana_dashboard: "1"
+  anntations: {}

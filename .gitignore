@@ -1,4 +1,4 @@
-saml-exporter
+./saml-exporter
 goreportcard.db
 ./config.yaml
 coverage.out
