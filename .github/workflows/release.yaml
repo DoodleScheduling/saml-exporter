@@ -1,0 +1,84 @@
+name: release
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # needed to write releases
+      id-token: write # needed for keyless signing
+      packages: write # needed for ghcr access
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout code
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-go@93397bea11091df50f3d7e59dc26a7711a8bcfbe # v4.1.0
+        with:
+          go-version: 1.20.5
+      - name: Docker Login
+        uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@11086d25041f77fe8fe7b9ea4e48e3b9192b8f19 # v3.1.2
+      - uses: anchore/sbom-action/download-syft@78fc58e266e87a38d4194b2137a3d4e9bcaf7ca1 # v0.14.3
+      - name: Create release and SBOM
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: goreleaser/goreleaser-action@7ec5c2b0c6cdda6e8bbb49444bc797dd33d74dd8 # v5.0.0
+        with:
+          version: latest
+          args: release --rm-dist --skip-validate
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  release-chart:
+    runs-on: ubuntu-latest
+    needs:
+    - release
+    permissions:
+      packages: write # Needed to publish chart to ghcr.io
+      id-token: write # Needed for keyless signing
+    steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@8ca2b8b2ece13480cda6dacd3511b49857a23c09 # v2.5.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout
+        uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac # v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Helm
+        uses: azure/setup-helm@5119fcb9089d432beecbf79bb2c7915207344b78 #v3.5
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@11086d25041f77fe8fe7b9ea4e48e3b9192b8f19 # v3.1.2
+
+      - name: Login to Github Container Registry using helm
+        run: echo ${{ secrets.GITHUB_TOKEN }} | helm registry login ghcr.io --username ${{ github.actor }} --password-stdin
+
+      - name: Package helm charts
+        run: |
+          packVersion=$(echo "${{ github.ref_name }}" | sed 's/^v//g')
+          helm package chart/saml-exporter -d chart --version=$packVersion --app-version=${{ github.ref_name }}
+
+      - name: Publish helm charts to Github Container Registry
+        run: |
+          repository=$(echo "${{ github.repository_owner }}" | tr [:upper:] [:lower:])
+          helm push ${{ github.workspace }}/chart/saml-exporter-*.tgz oci://ghcr.io/$repository/charts |& tee .digest
+          cosign login --username ${GITHUB_ACTOR} --password ${{ secrets.GITHUB_TOKEN }} ghcr.io
+          cosign sign --yes ghcr.io/${{ github.repository_owner }}/charts/saml-exporter@$(cat .digest | awk -F "[, ]+" '/Digest/{print $NF}')

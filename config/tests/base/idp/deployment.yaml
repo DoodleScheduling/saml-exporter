@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: idp
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: kristophjunge/test-saml-idp:latest
+        imagePullPolicy: IfNotPresent
+        name: idp
+        ports:
+          - containerPort: 8080
+            name: http
+            protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /simplesaml/saml2/idp/metadata.php
+            port: http
+        livenessProbe:
+          httpGet:
+            path: /simplesaml/saml2/idp/metadata.php
+            port: http
+        resources:
+          limits:
+            cpu: 100m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      terminationGracePeriodSeconds: 10

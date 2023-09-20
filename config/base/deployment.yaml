@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: saml-exporter
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - image: ghcr.io/doodlescheduling/saml-exporter:latest
+        imagePullPolicy: Never
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        name: exporter
+        ports:
+          - containerPort: 9412
+            name: http-metrics
+            protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: http-metrics
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: http-metrics
+        resources:
+          limits:
+            cpu: 100m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+      terminationGracePeriodSeconds: 10
