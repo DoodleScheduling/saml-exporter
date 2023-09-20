@@ -3,6 +3,7 @@ name: main
 on:
   push:
     branches:
+      - master
       - main
 
 permissions: {}
