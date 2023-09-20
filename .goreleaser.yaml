@@ -2,7 +2,7 @@ project_name: saml-exporter
 
 builds:
 - id: main
-  main: cmd/main.go
+  main: main.go
   binary: saml-exporter
   goos:
   - linux
