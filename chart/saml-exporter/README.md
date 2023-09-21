@@ -14,14 +14,14 @@ This command deploys the MongoDB Exporter with the default configuration. The [c
 
 ## Using the Chart
 
-The chart comes with a ServiceMonitor for use with the [Prometheus Operator](https://github.com/helm/charts/tree/master/stable/prometheus-operator).
+The chart comes with a ServiceMonitor (or PodMonitor) for use with the [Prometheus Operator](https://github.com/helm/charts/tree/master/stable/prometheus-operator).
 If you're not using the Prometheus Operator, you can disable the ServiceMonitor by setting `serviceMonitor.enabled` to `false` and instead
 populate the `podAnnotations` as below:
 
 ```yaml
 podAnnotations:
   prometheus.io/scrape: "true"
-  prometheus.io/port: "metrics"
+  prometheus.io/port: "http-metrics"
   prometheus.io/path: "/metrics"
 ```
 

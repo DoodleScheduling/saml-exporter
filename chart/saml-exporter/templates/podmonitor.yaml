@@ -3,15 +3,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: {{ include "saml-exporter.fullname" . }}
-   {{- if or .Values.labels .Values.podMonitor.labels }}
   labels:
-    {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "saml-exporter.labels" . | nindent 4 }}
     {{- with .Values.podMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- end }}  
   {{- if or .Values.annotations .Values.podMonitor.annotations }}
   annotations:
     {{- with .Values.annotations }}
@@ -26,14 +22,23 @@ metadata:
   {{- end }}
 spec:
   podMetricsEndpoints:
-  - port: metrics
-    path: {{ .Values.metricsPath }}
+  - path: {{ .Values.metricsPath }}
+    {{- if .Values.kubeRBACProxy.enabled }}
+    port: https-metrics
+    scheme: https
+    bearerTokenSecret:
+      key: token
+      name: {{ template "saml-exporter.serviceAccountName" . }}
+    tlsConfig:
+      insecureSkipVerify: true
+    {{- else }}
+    port: http-metrics
+    {{- end }}
     interval: {{ .Values.podMonitor.interval }}
     scrapeTimeout: {{ .Values.podMonitor.scrapeTimeout }}
     {{- if .Values.podMonitor.metricRelabelings }}
     metricRelabelings: {{ toYaml .Values.podMonitor.metricRelabelings | nindent 4 }}
     {{- end }}
-
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

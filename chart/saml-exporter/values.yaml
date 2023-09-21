@@ -1,5 +1,8 @@
 # Whitespace delimted list of http URL to SAML endpoints
-samlMetadataURL:
+# samlMetadataURLSlice:
+# - https://my-idp/metadata
+# - https://my-sp-1/metadata
+samlMetadataURLSlice: []
 
 image:
   pullPolicy: IfNotPresent
@@ -25,7 +28,7 @@ imagePullSecrets: []
 livenessProbe:
   httpGet:
     path: /healthz
-    port: metrics
+    port: http-metrics
   initialDelaySeconds: 10
 
 nameOverride: ""
@@ -52,8 +55,8 @@ priorityClassName: ""
 readinessProbe:
   httpGet:
     path: /healthz
-    port: metrics
-  initialDelaySeconds: 10
+    port: http-metrics
+  initialDelaySeconds: 3
 
 replicas: 1
 
@@ -141,9 +144,27 @@ prometheusRule:
   ##
   ## The rules will be processed as Helm template, allowing to set variables in them.
   enabled: false
-  #  namespace: monitoring
+  namespace: 
   labels: {}
-  rules: []
+  rulePrefix: SAML
+  additionalRules: []
+  # -- Should the X509ExporterReadErrors alerting rule be created to notify when the exporter can't read files or authenticate with the Kubernetes API. It aims at preventing undetected misconfigurations and monitoring regressions.
+  alertOnReadErrors: true
+  # -- Severity for the X509ExporterReadErrors alerting rule
+  readErrorsSeverity: warning
+  # -- Should the CertificateError alerting rule be created to notify when the exporter can't decode or process a certificate. Depends on `exposePerCertificateErrorMetrics` to be enabled too.
+  alertOnCertificateErrors: true
+  # -- Severity for the CertificateError alerting rule
+  certificateErrorsSeverity: warning
+  # -- Severity for the CertificateRenewal alerting rule
+  certificateRenewalsSeverity: warning
+  # -- Severity for the CertificateExpiration alerting rule
+  certificateExpirationsSeverity: critical
+  # -- Raise a warning alert when this little days are left before a certificate expiration (cert-manager would renew Let's Encrypt certs before day 29)
+  warningDaysLeft: 28
+  # -- Raise a critical alert when this little days are left before a certificate expiration (two weeks to deal with ACME rate limiting should this be an issue)
+  criticalDaysLeft: 14
+  # -- Additional labels to add to PrometheusRule objects
 
 tolerations: []
 
@@ -152,3 +173,20 @@ grafanaDashboard:
   labels:
     grafana_dashboard: "1"
   anntations: {}
+
+kubeRBACProxy:
+  enabled: true
+  image: quay.io/brancz/kube-rbac-proxy:v0.14.2
+  securityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["all"]
+    readOnlyRootFilesystem: true
+
+  resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 5m
+  #   memory: 64Mi

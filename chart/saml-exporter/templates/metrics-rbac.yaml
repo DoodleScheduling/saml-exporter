@@ -1,0 +1,63 @@
+{{- if .Values.kubeRBACProxy.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "saml-exporter.fullname" . }}-metrics-reader
+  labels:
+    {{- include "saml-exporter.labels" . | nindent 4 }}
+rules:
+  - nonResourceURLs:
+      - "/metrics"
+    verbs:
+      - get
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "saml-exporter.fullname" . }}-metrics
+  labels:
+    {{- include "saml-exporter.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "saml-exporter.fullname" . }}-metrics-reader
+subjects:
+- kind: ServiceAccount
+  name: {{ template "saml-exporter.serviceAccountName" . }}
+  namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ include "saml-exporter.fullname" . }}-proxy
+  labels:
+    {{- include "saml-exporter.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: {{ include "saml-exporter.fullname" . }}-proxy
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "saml-exporter.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ include "saml-exporter.fullname" . }}-proxy
+  labels:
+    {{- include "saml-exporter.labels" . | nindent 4 }}
+rules:
+  - apiGroups:
+      - authentication.k8s.io
+    resources:
+      - tokenreviews
+    verbs:
+      - create
+  - apiGroups:
+      - authorization.k8s.io
+    resources:
+      - subjectaccessreviews
+    verbs:
+      - create
+  {{- end }}
