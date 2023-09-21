@@ -3,15 +3,11 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ include "saml-exporter.fullname" . }}
-   {{- if or .Values.labels .Values.serviceMonitor.labels }}
   labels:
-    {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "saml-exporter.labels" . | nindent 4 }}
     {{- with .Values.serviceMonitor.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- end }}  
   {{- if or .Values.annotations .Values.serviceMonitor.annotations }}
   annotations:
     {{- with .Values.annotations }}
@@ -26,14 +22,23 @@ metadata:
   {{- end }}
 spec:
   endpoints:
-  - port: metrics
-    path: {{ .Values.metricsPath }}
+  - path: {{ .Values.metricsPath }}
+    {{- if .Values.kubeRBACProxy.enabled }}
+    port: https-metrics
+    scheme: https
+    bearerTokenSecret:
+      key: token
+      name: {{ template "saml-exporter.serviceAccountName" . }}
+    tlsConfig:
+      insecureSkipVerify: true
+    {{- else }}
+    port: http-metrics
+    {{- end }}
     interval: {{ .Values.serviceMonitor.interval }}
     scrapeTimeout: {{ .Values.serviceMonitor.scrapeTimeout }}
     {{- if .Values.serviceMonitor.metricRelabelings }}
     metricRelabelings: {{ toYaml .Values.serviceMonitor.metricRelabelings | nindent 4 }}
     {{- end }}
-
   namespaceSelector:
     matchNames:
     - {{ .Release.Namespace }}

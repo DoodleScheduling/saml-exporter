@@ -3,15 +3,11 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "saml-exporter.fullname" . }}-dashboard
-  {{- if or .Values.labels .Values.grafanaDashboard.labels }}
   labels:
-    {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "saml-exporter.labels" . | nindent 4 }}
     {{- with .Values.grafanaDashboard.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- end }}  
   {{- if or .Values.annotations .Values.grafanaDashboard.annotations }}
   annotations:
     {{- with .Values.annotations }}
@@ -22,6 +18,5 @@ metadata:
     {{- end }}
   {{- end }}  
 data:
-  {{- $fileName := printf "dashboard.json" (include "saml-exporter.fullname" .) }}
-  {{- ($.Files.Glob (printf $fileName)).AsConfig | nindent 2 }}
+  {{- ($.Files.Glob (printf "dashboard.json")).AsConfig | nindent 2 }}
 {{- end -}}

@@ -46,7 +46,7 @@ func init() {
 	flag.StringVarP(&config.Log.Encoding, "log-encoding", "e", "json", "Define the log format (default is json) [json,console]")
 	flag.StringVarP(&config.Bind, "bind", "b", ":9412", "Address to bind http server (default is :9412)")
 	flag.StringVarP(&config.MetricsPath, "metrics-path", "", "/metrics", "Metric path (default is /metrics)")
-	flag.StringVarP(&config.HealthPath, "health-path", "", "/health", "Health probe path (default is /health)")
+	flag.StringVarP(&config.HealthPath, "health-path", "", "/healthz", "Health probe path (default is /healthz)")
 	flag.StringVarP(&config.UserAgent, "user-agent", "", "saml-exporter (go-http-client)", "HTTP client user-agent header")
 }
 
@@ -74,6 +74,7 @@ func main() {
 	promCollector = collector.New(logger, http.DefaultClient, urls, metricsRoundTripper)
 	prometheus.MustRegister(promCollector)
 
+	logger.Info("starting http server...", "bind", config.Bind)
 	srv = buildHTTPServer(prometheus.DefaultGatherer)
 	err = srv.ListenAndServe()
 

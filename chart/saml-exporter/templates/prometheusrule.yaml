@@ -1,21 +1,98 @@
 {{- if .Values.prometheusRule.enabled }}
+{{- $rulePrefix:= .Values.prometheusRule.rulePrefix }}
 apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
 metadata:
   name: {{ template "saml-exporter.fullname" . }}
-  labels: {{- merge ( include "saml-exporter.labels" . | fromYaml) .Values.prometheusRule.labels | toYaml | nindent 4 }}
-  {{- with .Values.annotations }}
-  annotations:
+  labels:
+    {{- include "saml-exporter.labels" . | nindent 4 }}
+    {{- with .Values.prometheusRule.labels }}
     {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- end }}
+  {{- if or .Values.annotations .Values.prometheusRule.annotations }}
+  annotations:
+    {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- with .Values.prometheusRule.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- end }}  
   {{- if .Values.prometheusRule.namespace }}
   namespace: {{ .Values.prometheusRule.namespace }}
   {{- end }}
 spec:
-{{- with .Values.prometheusRule.rules }}
   groups:
-    - name: {{ template "saml-exporter.name" $ }}
-      rules: {{ tpl (toYaml .) $ | nindent 8 }}
+  {{- if .Values.prometheusRule.disableBuiltinAlertGroup }}
+    {{- if not (len .Values.prometheusRule.extraAlertGroups) }}
+      {{ fail "Extra alert groups (extraAlertGroups) are required when disableBuiltinAlertGroup is set!" }}
+    {{- end }}
+  {{- else }}
+  - name: saml-exporter.rules
+    rules:
+    {{- if .Values.prometheusRule.alertOnReadErrors }}
+    - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateReadErrors" | trim }}'
+      expr: delta(saml_x509_read_errors[15m]) > 0
+      for: 5m
+      labels:
+        severity: {{ .Values.prometheusRule.readErrorsSeverity }}
+        {{- if .Values.prometheusRule.alertExtraLabels }}
+        {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
+        {{- end }}
+      annotations:
+        summary: Increasing read errors for saml-exporter
+        description: Over the last 15 minutes, this saml-exporter instance has experienced errors reading certificate files or querying the Kubernetes API. This could be caused by a misconfiguration if triggered when the exporter starts.
+        {{- if .Values.prometheusRule.alertExtraAnnotations }}
+        {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.prometheusRule.alertOnCertificateErrors }}
+    - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateError" | trim }}'
+      expr: saml_x509_cert_error > 0
+      for: 15m
+      labels:
+        severity: {{ .Values.prometheusRule.certificateErrorsSeverity }}
+        {{- if .Values.prometheusRule.alertExtraLabels }}
+        {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
+        {{- end }}
+      annotations:
+        summary: Certificate cannot be decoded
+        description: Certificate could not be decoded {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        {{- if .Values.prometheusRule.alertExtraAnnotations }}
+        {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
+        {{- end }}
+    {{- end }}
+    - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateRenewal" | trim }}'
+      expr: ((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.warningDaysLeft }}
+      for: 15m
+      labels:
+        severity: {{ .Values.prometheusRule.certificateRenewalsSeverity }}
+        {{- if .Values.prometheusRule.alertExtraLabels }}
+        {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
+        {{- end }}
+      annotations:
+        summary: Certificate should be renewed
+        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" should be renewed {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        {{- if .Values.prometheusRule.alertExtraAnnotations }}
+        {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
+        {{- end }}
+    - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateExpiration" | trim }}'
+      expr: ((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.criticalDaysLeft }}
+      for: 15m
+      labels:
+        severity: {{ .Values.prometheusRule.certificateExpirationsSeverity }}
+        {{- if .Values.prometheusRule.alertExtraLabels }}
+        {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
+        {{- end }}
+      annotations:
+        summary: Certificate is about to expire
+        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" is about to expire {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        {{- if .Values.prometheusRule.alertExtraAnnotations }}
+        {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
+        {{- end }}
+  {{- end }}
+{{- range .Values.prometheusRule.extraAlertGroups }}
+  - {{ tpl (toYaml .) $ | indent 4 | trim }}
 {{- end }}
 {{- end }}

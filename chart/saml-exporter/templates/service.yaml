@@ -1,17 +1,13 @@
-{{ if .Values.service.enabled }}
+{{ if or .Values.service.enabled .Values.serviceMonitor.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "saml-exporter.fullname" . }}
-   {{- if or .Values.labels .Values.service.labels }}
   labels:
-    {{- with .Values.labels }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- include "saml-exporter.labels" . | nindent 4 }}
     {{- with .Values.service.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
-  {{- end }}  
   {{- if or .Values.annotations .Values.service.annotations }}
   annotations:
     {{- with .Values.annotations }}
@@ -21,19 +17,20 @@ metadata:
     {{- toYaml . | nindent 4 }}
     {{- end }}
   {{- end }}  
-
-
-  labels: {{- merge ( include "saml-exporter.labels" . | fromYaml) .Values.service.labels | toYaml | nindent 4 }}
-  {{- with .Values.annotations }}
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
   ports:
+    {{- if .Values.kubeRBACProxy.enabled }}
+    - port: {{ .Values.service.port }}
+      protocol: TCP
+      name: https-metrics
+      protocol: TCP
+      targetPort: https-metrics
+    {{- else }}
     - port: {{ .Values.service.port }}
       targetPort: http-metrics
       protocol: TCP
       name: http-metrics
+    {{- end }}
   selector:
     app.kubernetes.io/name: {{ include "saml-exporter.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
