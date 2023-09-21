@@ -144,13 +144,13 @@ prometheusRule:
   ##
   ## The rules will be processed as Helm template, allowing to set variables in them.
   enabled: false
-  namespace: 
+  namespace:
   labels: {}
   rulePrefix: SAML
   additionalRules: []
-  # -- Should the X509ExporterReadErrors alerting rule be created to notify when the exporter can't read files or authenticate with the Kubernetes API. It aims at preventing undetected misconfigurations and monitoring regressions.
+  # -- Should the X509CertificateReadErrors alerting rule be created to notify when the exporter can't read files or authenticate with the Kubernetes API. It aims at preventing undetected misconfigurations and monitoring regressions.
   alertOnReadErrors: true
-  # -- Severity for the X509ExporterReadErrors alerting rule
+  # -- Severity for the X509CertificateReadErrors alerting rule
   readErrorsSeverity: warning
   # -- Should the CertificateError alerting rule be created to notify when the exporter can't decode or process a certificate. Depends on `exposePerCertificateErrorMetrics` to be enabled too.
   alertOnCertificateErrors: true
@@ -160,11 +160,8 @@ prometheusRule:
   certificateRenewalsSeverity: warning
   # -- Severity for the CertificateExpiration alerting rule
   certificateExpirationsSeverity: critical
-  # -- Raise a warning alert when this little days are left before a certificate expiration (cert-manager would renew Let's Encrypt certs before day 29)
   warningDaysLeft: 28
-  # -- Raise a critical alert when this little days are left before a certificate expiration (two weeks to deal with ACME rate limiting should this be an issue)
   criticalDaysLeft: 14
-  # -- Additional labels to add to PrometheusRule objects
 
 tolerations: []
 
