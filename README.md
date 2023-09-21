@@ -1,8 +1,8 @@
 # Prometheus SAML Metadata exporter
 [![release](https://github.com/doodlescheduling/saml-exporter/actions/workflows/release.yaml/badge.svg)](https://github.com/doodlescheduling/saml-exporter/actions/workflows/release.yaml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/doodlescheduling/saml-exporter)](https://goreportcard.com/report/github.com/doodlescheduling/saml-exporter)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/doodlescheduling/saml-exporter/badge)](https://api.securityscorecards.dev/projects/github.com/doodlescheduling/saml-exporter)
-[![Coverage Status](https://coveralls.io/repos/github/doodlescheduling/saml-exporter/badge.svg?branch=master)](https://coveralls.io/github/doodlescheduling/saml-exporter?branch=master)
+[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/DoodleScheduling/saml-exporter/badge)](https://api.securityscorecards.dev/projects/github.com/DoodleScheduling/saml-exporter)
+[![Coverage Status](https://coveralls.io/repos/github/DoodleScheduling/saml-exporter/badge.svg?branch=master)](https://coveralls.io/github/DoodleScheduling/saml-exporter?branch=master)
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/saml-exporter)](https://artifacthub.io/packages/search?repo=saml-exporter)
 
 SAML Metadata exporter for [Prometheus](https://prometheus.io).
