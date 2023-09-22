@@ -17,6 +17,7 @@ import (
 	"github.com/go-logr/zapr"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
 	"github.com/sethvargo/go-envconfig"
 	flag "github.com/spf13/pflag"
 	"go.uber.org/zap"
@@ -67,6 +68,8 @@ func main() {
 
 	urls, err := buildURL()
 	must(err)
+
+	prometheus.MustRegister(version.NewCollector("saml_exporter"))
 
 	client := http.DefaultClient
 	metricsRoundTripper := transport.NewMetrics(http.DefaultTransport)

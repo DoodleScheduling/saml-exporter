@@ -21,6 +21,10 @@ Get the exporter either as a binaray from the latest release or packaged as a [D
 For kubernetes users there is an official helm chart.
 Please read the installation instructions [here](https://github.com/doodlescheduling/saml-exporter/blob/master/chart/saml-exporter/README.md).
 
+```sh
+helm template saml-exporter oci://ghcr.io/doodlescheduling/charts/saml-exporter:latest --set samlMetadataURLSlice='{http://idp/metadata}'
+```
+
 ### Docker
 You can run the exporter using docker:
 ```sh
@@ -30,7 +34,7 @@ docker run ghcr.io/doodlescheduling/saml-exporter:latest http://idp/metadata
 ## Usage
 
 ```
-$ saml-exporter
+saml-exporter
 ```
 
 Use the `-help` flag to get help information.

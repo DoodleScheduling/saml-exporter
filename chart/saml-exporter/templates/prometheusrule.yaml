@@ -41,30 +41,30 @@ spec:
         {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
         {{- end }}
       annotations:
-        summary: Increasing read errors for saml-exporter
-        description: Over the last 15 minutes, this saml-exporter instance has experienced errors reading certificate files or querying the Kubernetes API. This could be caused by a misconfiguration if triggered when the exporter starts.
+        summary: Increasing certificate parse errors for saml-exporter
+        description: Over the last 15 minutes, this saml-exporter instance has experienced errors parsing certificates from saml metadata.
         {{- if .Values.prometheusRule.alertExtraAnnotations }}
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     {{- end }}
-    {{- if .Values.prometheusRule.alertOnCertificateErrors }}
-    - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateError" | trim }}'
-      expr: saml_x509_cert_error > 0
-      for: 15m
+    {{- if .Values.prometheusRule.alertOnMetadataErrors }}
+    - alert: '{{ printf "%s %s" $rulePrefix "MetadataError" | trim }}'
+      expr: delta(saml_metadata_errors[15m]) > 0
+      for: 5m
       labels:
-        severity: {{ .Values.prometheusRule.certificateErrorsSeverity }}
+        severity: {{ .Values.prometheusRule.metadataErrorsSeverity }}
         {{- if .Values.prometheusRule.alertExtraLabels }}
         {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
         {{- end }}
       annotations:
-        summary: Certificate cannot be decoded
-        description: Certificate could not be decoded {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        summary: Increasing saml metadata errors for saml-exporter
+        description: Over the last 15 minutes, this saml-exporter instance has experienced errors parsing saml metadata
         {{- if .Values.prometheusRule.alertExtraAnnotations }}
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     {{- end }}
     - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateRenewal" | trim }}'
-      expr: ((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.warningDaysLeft }}
+      expr: count(saml_x509_cert_not_after) by (entityid, use) - count(((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.warningDaysLeft }}) by (entityid, use) == 0
       for: 15m
       labels:
         severity: {{ .Values.prometheusRule.certificateRenewalsSeverity }}
@@ -73,12 +73,12 @@ spec:
         {{- end }}
       annotations:
         summary: Certificate should be renewed
-        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" should be renewed {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" should be renewed
         {{- if .Values.prometheusRule.alertExtraAnnotations }}
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     - alert: '{{ printf "%s %s" $rulePrefix "X509CertificateExpiration" | trim }}'
-      expr: ((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.criticalDaysLeft }}
+      expr: count(saml_x509_cert_not_after) by (entityid, use) - count(((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.criticalDaysLeft }}) by (entityid, use) == 0
       for: 15m
       labels:
         severity: {{ .Values.prometheusRule.certificateExpirationsSeverity }}
@@ -86,8 +86,8 @@ spec:
         {{- toYaml .Values.prometheusRule.alertExtraLabels | nindent 8 }}
         {{- end }}
       annotations:
-        summary: Certificate is about to expire
-        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" is about to expire {{ "{{if" }} $labels.secret_name {{ "}}" }}in Kubernetes secret "{{ "{{" }} $labels.secret_namespace {{ "}}" }}/{{ "{{" }} $labels.secret_name {{ "}}" }}"{{ "{{else}}" }}at location "{{ "{{" }} $labels.filepath {{ "}}" }}"{{ "{{end}}" }}
+        summary: All certificates are soon expiring. There will be no certificate left for rotation which is valid.
+        description: Certificate for "{{ "{{" }} $labels.subject_CN {{ "}}" }}" should be renewed
         {{- if .Values.prometheusRule.alertExtraAnnotations }}
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}

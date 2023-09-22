@@ -132,7 +132,7 @@ func (c *Collector) collectExpireMetric(ch chan<- prometheus.Metric, entity *sam
 			continue
 		}
 
-		metric := notAfter.With(prometheus.Labels{
+		labels := prometheus.Labels{
 			"entityid":      entity.EntityID,
 			"use":           keyDescriptor.Use,
 			"serial_number": cert.SerialNumber.String(),
@@ -145,9 +145,14 @@ func (c *Collector) collectExpireMetric(ch chan<- prometheus.Metric, entity *sam
 			"subject_CN":    cert.Subject.CommonName,
 			"subject_L":     strings.Join(cert.Subject.Locality, ","),
 			"subject_O":     strings.Join(cert.Subject.Organization, ","),
-		})
+		}
 
-		metric.Set(float64(cert.NotAfter.Unix()))
-		ch <- metric
+		metricNotAfter := notAfter.With(labels)
+		metricNotAfter.Set(float64(cert.NotAfter.Unix()))
+		ch <- metricNotAfter
+
+		metricNotBefore := notBefore.With(labels)
+		metricNotBefore.Set(float64(cert.NotBefore.Unix()))
+		ch <- metricNotBefore
 	}
 }
