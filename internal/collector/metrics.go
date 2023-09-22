@@ -3,6 +3,11 @@ package collector
 import "github.com/prometheus/client_golang/prometheus"
 
 var (
+	notBefore = prometheus.NewGaugeVec(prometheus.GaugeOpts{
+		Name: "saml_x509_cert_not_before",
+		Help: "SAML X509 certificate validity period start",
+	}, []string{"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"})
+
 	notAfter = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "saml_x509_cert_not_after",
 		Help: "SAML X509 certificate expiration date",

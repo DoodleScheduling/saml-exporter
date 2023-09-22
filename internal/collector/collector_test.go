@@ -89,6 +89,11 @@ func TestInitializeMetrics(t *testing.T) {
 			# TYPE saml_x509_cert_not_after gauge
 			saml_x509_cert_not_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.280430694e+09
 			saml_x509_cert_not_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+			
+			# HELP saml_x509_cert_not_before SAML X509 certificate validity period start
+			# TYPE saml_x509_cert_not_before gauge
+			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.162494694e+09
+			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
 			`,
 		},
 		{
@@ -154,6 +159,11 @@ func TestInitializeMetrics(t *testing.T) {
 			# TYPE saml_x509_cert_not_after gauge
 			saml_x509_cert_not_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.280430694e+09
 			saml_x509_cert_not_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+			
+			# HELP saml_x509_cert_not_before SAML X509 certificate validity period start
+			# TYPE saml_x509_cert_not_before gauge
+			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.162494694e+09
+			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
 			`,
 		},
 		{
@@ -206,6 +216,10 @@ func TestInitializeMetrics(t *testing.T) {
 			# HELP saml_x509_cert_not_after SAML X509 certificate expiration date
 			# TYPE saml_x509_cert_not_after gauge
 			saml_x509_cert_not_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+
+			# HELP saml_x509_cert_not_before SAML X509 certificate validity period start
+			# TYPE saml_x509_cert_not_before gauge
+			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
 
 			# HELP saml_x509_read_errors Errors encountered while parsing SAML X509 certificates
 			# TYPE saml_x509_read_errors counter
@@ -284,7 +298,8 @@ func TestInitializeMetrics(t *testing.T) {
 			mockHttpClient := http.DefaultClient
 			mockHttpClient.Transport = test.response
 
-			c := New(logr.Discard(), mockHttpClient, []*url.URL{{Host: "saml-metadata"}})
+			emptyDependantCollector := New(logr.Discard(), mockHttpClient, []*url.URL{})
+			c := New(logr.Discard(), mockHttpClient, []*url.URL{{Host: "saml-metadata"}}, emptyDependantCollector)
 			reg.MustRegister(c)
 
 			assert.NoError(t, testutil.GatherAndCompare(reg, strings.NewReader(test.expected)))

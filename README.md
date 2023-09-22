@@ -21,6 +21,10 @@ Get the exporter either as a binaray from the latest release or packaged as a [D
 For kubernetes users there is an official helm chart.
 Please read the installation instructions [here](https://github.com/doodlescheduling/saml-exporter/blob/master/chart/saml-exporter/README.md).
 
+```sh
+helm template saml-exporter oci://ghcr.io/doodlescheduling/charts/saml-exporter:latest --set samlMetadataURLSlice='{http://idp/metadata}'
+```
+
 ### Docker
 You can run the exporter using docker:
 ```sh
@@ -30,7 +34,7 @@ docker run ghcr.io/doodlescheduling/saml-exporter:latest http://idp/metadata
 ## Usage
 
 ```
-$ saml-exporter
+saml-exporter
 ```
 
 Use the `-help` flag to get help information.
@@ -60,10 +64,12 @@ The exporter can be configured by either command line flags (`saml-exporter -h`)
 
 | Name                     | Description                              | Type | Labels |
 |--------------------------|------------------------------------------|---------|-----------|
+| `saml_exporter_build_info`    | Build info SAML exporter            | `Gauge` | `"branch", "goversion", "revision", "revision"` |
 | `http_client_request`    | HTTP client request                      | `Counter` | `"host", "code", "method"` |
 | `saml_metadata_errors`   | Errors encountered while parsing SAML metadata | `Counter` | `"url"` |
 | `saml_x509_read_errors`  | Errors encountered while parsing SAML X509 certificates  | `Counter` | `"entityid", "use"` |
 | `saml_x509_cert_not_after` | SAML X509 certificate expiration date  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
+| `saml_x509_cert_not_before` | SAML X509 certificate not valid before  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
 
 ## Grafana dashboard
 
