@@ -22,7 +22,7 @@ For kubernetes users there is an official helm chart.
 Please read the installation instructions [here](https://github.com/doodlescheduling/saml-exporter/blob/master/chart/saml-exporter/README.md).
 
 ```sh
-helm template saml-exporter oci://ghcr.io/doodlescheduling/charts/saml-exporter:latest --set samlMetadataURLSlice='{http://idp/metadata}'
+helm template saml-exporter oci://ghcr.io/doodlescheduling/charts/saml-exporter --set samlMetadataURLSlice='{http://idp/metadata}'
 ```
 
 ### Docker
