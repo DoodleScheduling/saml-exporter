@@ -26,7 +26,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": 13922,
   "graphTooltip": 0,
-  "id": 31840,
+  "id": 31841,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -243,6 +243,74 @@
         }
       ],
       "title": "Expiring within $critical_threshold days",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "dark-red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 11,
+        "y": 1
+      },
+      "id": 50,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "9.2.0",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "editorMode": "code",
+          "expr": "count(sum(rate(http_client_request{code!~\"^2.*\", job=~\".*/saml-exporter\"}[$__rate_interval])) by (host))",
+          "interval": "",
+          "legendFormat": "",
+          "queryType": "randomWalk",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Unavailable SAML Metadata",
       "type": "stat"
     },
     {
@@ -665,7 +733,7 @@
                 "serial_number",
                 "use"
               ],
-              "pattern": "^(subject_CN|secret_namespace|secret_name|Value)$"
+              "pattern": "^(subject_CN|Value)$"
             }
           }
         },
@@ -683,8 +751,6 @@
             "renameByName": {
               "Value": "Time Left",
               "entityid": "Entity ID",
-              "secret_name": "Secret Name",
-              "secret_namespace": "Secret Namespace",
               "serial_number": "Serial",
               "subject_CN": "Subject CN",
               "use": "Usage"
@@ -905,7 +971,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "pattern": "^(subject_CN|secret_namespace|secret_name|Value)$"
+              "pattern": "^(subject_CN|Value)$"
             }
           }
         },
@@ -915,14 +981,10 @@
             "excludeByName": {},
             "indexByName": {
               "Value": 3,
-              "secret_name": 2,
-              "secret_namespace": 1,
               "subject_CN": 0
             },
             "renameByName": {
               "Value": "Days",
-              "secret_name": "Secret Name",
-              "secret_namespace": "Secret Namespace",
               "subject_CN": "Subject CN"
             }
           }
@@ -1004,7 +1066,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, (saml_x509_cert_not_after{secret_name!=\"\"} - saml_x509_cert_not_before) / 86400)",
+          "expr": "topk(10, (saml_x509_cert_not_after - saml_x509_cert_not_before) / 86400)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1019,7 +1081,7 @@
           "id": "filterFieldsByName",
           "options": {
             "include": {
-              "pattern": "^(subject_CN|secret_namespace|secret_name|Value)$"
+              "pattern": "^(subject_CN|Value)$"
             }
           }
         },
@@ -1029,14 +1091,10 @@
             "excludeByName": {},
             "indexByName": {
               "Value": 3,
-              "secret_name": 2,
-              "secret_namespace": 1,
               "subject_CN": 0
             },
             "renameByName": {
               "Value": "Days",
-              "secret_name": "Secret Name",
-              "secret_namespace": "Secret Namespace",
               "subject_CN": "Subject CN"
             }
           }
@@ -1151,7 +1209,7 @@
             "uid": "RVra6BSnk"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_client_request{service=\"saml-exporter\"}[$__rate_interval])) by (code, host)",
+          "expr": "sum(rate(http_client_request{job=~\".*/saml-exporter\"}[$__rate_interval])) by (code, host)",
           "legendFormat": "{{host}}: {{code}}",
           "range": true,
           "refId": "A"
@@ -1746,11 +1804,6 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "thanos",
-          "value": "thanos"
-        },
         "hide": 0,
         "includeAll": false,
         "label": "Datasource",

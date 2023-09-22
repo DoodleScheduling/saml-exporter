@@ -91,7 +91,7 @@ spec:
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     - alert: '{{ printf "%s%s" $rulePrefix "UnavailableMetadataEndpoint" | trim }}'
-      expr: sum(rate(http_client_request{job="{{ include "saml-exporter.fullname" . }}", code!~"^2.*"}[5m])) > 0
+      expr: sum(rate(http_client_request{job="{{ .Values.podMonitor.namespace | default .Values.serviceMonitor.namespace | default .Release.Namespace}}/{{ include "saml-exporter.fullname" . }}", code!~"^2.*"}[5m])) > 0
       for: 3m
       labels:
         severity: {{ .Values.prometheusRule.unavailableMetadataEndpointSeverity }}
