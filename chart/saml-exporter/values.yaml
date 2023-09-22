@@ -153,6 +153,7 @@ prometheusRule:
   metadataErrorsSeverity: warning
   certificateRenewalsSeverity: warning
   certificateExpirationsSeverity: critical
+  unavailableMetadataEndpointSeverity: critical
   warningDaysLeft: 28
   criticalDaysLeft: 14
 

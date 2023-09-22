@@ -10,13 +10,24 @@ To install the chart with the release name `saml-exporter`:
 helm upgrade saml-exporter --install oci://ghcr.io/doodlescheduling/charts/saml-exporter
 ```
 
-This command deploys the MongoDB Exporter with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
+This command deploys the SAML Exporter with the default configuration. The [configuration](#configuration) section lists the parameters that can be configured during installation.
 
 ## Using the Chart
 
 The chart comes with a ServiceMonitor (or PodMonitor) for use with the [Prometheus Operator](https://github.com/helm/charts/tree/master/stable/prometheus-operator).
-If you're not using the Prometheus Operator, you can disable the ServiceMonitor by setting `serviceMonitor.enabled` to `false` and instead
-populate the `podAnnotations` as below:
+The chart also bundles sane default PrometheusRules which alert regarding invalid metadata, expiring certificates and unavailable endpoints.
+Prometheus Operator support is disabled by default but may be enabled using:
+
+```
+podMonitor:
+  enabled: true
+
+prometheusRule: 
+  enabled: true
+```
+
+
+If you're not using the Prometheus Operator you may add pod annotations for scraping:
 
 ```yaml
 podAnnotations:
