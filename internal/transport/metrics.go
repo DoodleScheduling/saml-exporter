@@ -9,7 +9,7 @@ import (
 
 var (
 	requestResponse = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "http_client_request",
+		Name: "http_client_request_total",
 		Help: "HTTP client request",
 	}, []string{"host", "code", "method"})
 )
