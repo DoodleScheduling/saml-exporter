@@ -11,11 +11,10 @@ builds:
   env:
   - CGO_ENABLED=0
   ldflags:
-  - -X github.com/prometheus/common/version.Version={{.Version}}
-  - -X github.com/prometheus/common/version.Revision={{.Revision}}
-  - -X github.com/prometheus/common/version.Branch={{.Branch}}
-  - -X github.com/prometheus/common/version.BuildUser={{user}}@{{host}}
-  - -X github.com/prometheus/common/version.BuildDate={{date "20060102-15:04:05"}} 
+  - -X github.com/prometheus/common/version.Version={{ .Version }}
+  - -X github.com/prometheus/common/version.Revision={{ .FullCommit }}
+  - -X github.com/prometheus/common/version.Branch={{ .Branch }}
+  - -X github.com/prometheus/common/version.BuildDate={{ time "2006-01-02T15:04:05Z07:00" }}
 
 archives:
 - id: main
@@ -55,7 +54,7 @@ dockers:
   - --label=org.opencontainers.image.version={{ .Version }}
   - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
   - --label=org.opencontainers.image.revision={{ .FullCommit }}
-  - --label=org.opencontainers.image.licenses=MIT
+  - --label=org.opencontainers.image.licenses=Apache-2.0
 - image_templates: 
   - "ghcr.io/doodlescheduling/{{ .ProjectName }}:v{{ .Version }}-arm64v8"
   goarch: arm64
@@ -72,7 +71,7 @@ dockers:
   - --label=org.opencontainers.image.version={{ .Version }}
   - --label=org.opencontainers.image.created={{ time "2006-01-02T15:04:05Z07:00" }}
   - --label=org.opencontainers.image.revision={{ .FullCommit }}
-  - --label=org.opencontainers.image.licenses=MIT
+  - --label=org.opencontainers.image.licenses=Apache-2.0
 
 docker_manifests:
 - name_template: ghcr.io/doodlescheduling/{{ .ProjectName }}:v{{ .Version }}
