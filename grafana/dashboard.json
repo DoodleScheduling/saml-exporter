@@ -302,7 +302,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "count(sum(rate(http_client_request{code!~\"^2.*\", job=~\".*/saml-exporter\"}[$__rate_interval])) by (host))",
+          "expr": "count(sum(rate(http_client_request{code!~\"^2.*\", job=~\".*/saml-exporter\"}[$__rate_interval])) by (host)) or vector(0)",
           "interval": "",
           "legendFormat": "",
           "queryType": "randomWalk",
