@@ -302,7 +302,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "count(sum(rate(http_client_request{code!~\"^2.*\", job=~\".*/saml-exporter\"}[$__rate_interval])) by (host)) or vector(0)",
+          "expr": "count(sum(rate(http_client_request_total{code!~\"^2.*\", job=~\".*/saml-exporter\"}[$__rate_interval])) by (host)) or vector(0)",
           "interval": "",
           "legendFormat": "",
           "queryType": "randomWalk",
@@ -568,7 +568,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "(sum(saml_x509_read_errors) or vector(0)) + (sum(saml_metadata_errors) or vector(0))",
+          "expr": "(sum(saml_x509_read_error_total) or vector(0)) + (sum(saml_metadata_error_total) or vector(0))",
           "instant": false,
           "interval": "",
           "legendFormat": "",
@@ -1209,7 +1209,7 @@
             "uid": "RVra6BSnk"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_client_request{job=~\".*/saml-exporter\"}[$__rate_interval])) by (code, host)",
+          "expr": "sum(rate(http_client_request_total{job=~\".*/saml-exporter\"}[$__rate_interval])) by (code, host)",
           "legendFormat": "{{host}}: {{code}}",
           "range": true,
           "refId": "A"
@@ -1295,7 +1295,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum((saml_x509_read_errors or vector(0)) > bool 0)",
+          "expr": "sum((saml_x509_read_error_total or vector(0)) > bool 0)",
           "interval": "",
           "legendFormat": "Certificate parsing errors",
           "queryType": "randomWalk",
@@ -1308,7 +1308,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum((saml_metadata_errors or vector(0)) > bool 0)",
+          "expr": "sum((saml_metadata_error_total or vector(0)) > bool 0)",
           "hide": false,
           "legendFormat": "Metadata parsing errors",
           "range": true,
@@ -1400,7 +1400,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(saml_x509_read_errors) or vector(0)",
+          "expr": "sum(saml_x509_read_error_total) or vector(0)",
           "interval": "",
           "legendFormat": "Certificate parsing errors",
           "queryType": "randomWalk",
@@ -1413,7 +1413,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(saml_metadata_errors) or vector(0)",
+          "expr": "sum(saml_metadata_error_total) or vector(0)",
           "hide": false,
           "legendFormat": "Metadata parsing errors",
           "range": true,
@@ -1506,7 +1506,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(saml_x509_read_errors[$__rate_interval])) or vector(0)",
+          "expr": "sum(rate(saml_x509_read_error_total[$__rate_interval])) or vector(0)",
           "interval": "",
           "legendFormat": "Certificate parsing errors",
           "queryType": "randomWalk",
@@ -1519,7 +1519,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "sum(rate(saml_metadata_errors[$__rate_interval])) or vector(0)",
+          "expr": "sum(rate(saml_metadata_error_total[$__rate_interval])) or vector(0)",
           "hide": false,
           "legendFormat": "Metadata parsing errors",
           "range": true,
@@ -1632,7 +1632,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, saml_x509_read_errors)",
+          "expr": "topk(10, saml_x509_read_error_total)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1646,7 +1646,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, saml_metadata_errors)",
+          "expr": "topk(10, saml_metadata_error_total)",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,
@@ -1751,7 +1751,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, rate(saml_x509_read_errors[6h]))",
+          "expr": "topk(10, rate(saml_x509_read_error_total[6h]))",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1765,7 +1765,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "editorMode": "code",
-          "expr": "topk(10, rate(saml_metadata_errors[6h]))",
+          "expr": "topk(10, rate(saml_metadata_error_total[6h]))",
           "hide": false,
           "legendFormat": "__auto",
           "range": true,

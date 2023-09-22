@@ -221,9 +221,9 @@ func TestInitializeMetrics(t *testing.T) {
 			# TYPE saml_x509_cert_not_before gauge
 			saml_x509_cert_not_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
 
-			# HELP saml_x509_read_errors Errors encountered while parsing SAML X509 certificates
-			# TYPE saml_x509_read_errors counter
-			saml_x509_read_errors{entityid="example-entity-id",use="signing"} 1
+			# HELP saml_x509_read_error_total Errors encountered while parsing SAML X509 certificates
+			# TYPE saml_x509_read_error_total counter
+			saml_x509_read_error_total{entityid="example-entity-id",use="signing"} 1
 			`,
 		},
 		{
@@ -250,9 +250,9 @@ func TestInitializeMetrics(t *testing.T) {
 			</EntityDescriptor>`)),
 			}, nil),
 			expected: `
-			# HELP saml_x509_read_errors Errors encountered while parsing SAML X509 certificates
-			# TYPE saml_x509_read_errors counter
-			saml_x509_read_errors{entityid="example-entity-id",use="signing"} 1
+			# HELP saml_x509_read_error_total Errors encountered while parsing SAML X509 certificates
+			# TYPE saml_x509_read_error_total counter
+			saml_x509_read_error_total{entityid="example-entity-id",use="signing"} 1
 			`,
 		},
 		{
@@ -262,9 +262,9 @@ func TestInitializeMetrics(t *testing.T) {
 				Body:       io.NopCloser(strings.NewReader(`Invalid XML`)),
 			}, nil),
 			expected: `
-			# HELP saml_metadata_errors Errors encountered while parsing SAML metadata
-			# TYPE saml_metadata_errors counter
-			saml_metadata_errors{url="//saml-metadata"} 1
+			# HELP saml_metadata_error_total Errors encountered while parsing SAML metadata
+			# TYPE saml_metadata_error_total counter
+			saml_metadata_error_total{url="//saml-metadata"} 1
 			`,
 		},
 		{
@@ -274,9 +274,9 @@ func TestInitializeMetrics(t *testing.T) {
 				Body:       io.NopCloser(iotest.ErrReader(errors.New("random error"))),
 			}, nil),
 			expected: `
-			# HELP saml_metadata_errors Errors encountered while parsing SAML metadata
-			# TYPE saml_metadata_errors counter
-			saml_metadata_errors{url="//saml-metadata"} 1
+			# HELP saml_metadata_error_total Errors encountered while parsing SAML metadata
+			# TYPE saml_metadata_error_total counter
+			saml_metadata_error_total{url="//saml-metadata"} 1
 			`,
 		},
 		{

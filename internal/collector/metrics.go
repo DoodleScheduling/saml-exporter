@@ -14,12 +14,12 @@ var (
 	}, []string{"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"})
 
 	certParse = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "saml_x509_read_errors",
+		Name: "saml_x509_read_error_total",
 		Help: "Errors encountered while parsing SAML X509 certificates",
 	}, []string{"entityid", "use"})
 
 	metadataParse = prometheus.NewCounterVec(prometheus.CounterOpts{
-		Name: "saml_metadata_errors",
+		Name: "saml_metadata_error_total",
 		Help: "Errors encountered while parsing SAML metadata",
 	}, []string{"url"})
 )

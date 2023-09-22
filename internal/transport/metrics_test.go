@@ -31,9 +31,9 @@ func TestMetrics(t *testing.T) {
 	reg := prometheus.NewRegistry()
 	reg.MustRegister(metrics)
 	assert.NoError(t, testutil.GatherAndCompare(reg, strings.NewReader(`
-	# HELP http_client_request HTTP client request
-	# TYPE http_client_request counter
-	http_client_request{code="200",host="",method="GET"} 1
+	# HELP http_client_request_total HTTP client request
+	# TYPE http_client_request_total counter
+	http_client_request_total{code="200",host="",method="GET"} 1
 	`)))
 
 	requestResponse.Reset()
@@ -52,8 +52,8 @@ func TestMetrics(t *testing.T) {
 	reg = prometheus.NewRegistry()
 	reg.MustRegister(metrics)
 	assert.NoError(t, testutil.GatherAndCompare(reg, strings.NewReader(`
-	# HELP http_client_request HTTP client request
-	# TYPE http_client_request counter
-	http_client_request{code="0",host="",method="POST"} 1
+	# HELP http_client_request_total HTTP client request
+	# TYPE http_client_request_total counter
+	http_client_request_total{code="0",host="",method="POST"} 1
 `)))
 }
