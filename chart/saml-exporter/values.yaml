@@ -94,6 +94,8 @@ securityContext:
   capabilities:
     drop: ["all"]
   readOnlyRootFilesystem: true
+
+podSecurityContext:
   runAsGroup: 10000
   runAsNonRoot: true
   runAsUser: 10000

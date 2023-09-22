@@ -109,6 +109,10 @@ spec:
       volumes:
       {{ toYaml .Values.extraVolumes | trim | nindent 6 }}
       {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
