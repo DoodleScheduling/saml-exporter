@@ -65,11 +65,11 @@ The exporter can be configured by either command line flags (`saml-exporter -h`)
 | Name                     | Description                              | Type | Labels |
 |--------------------------|------------------------------------------|---------|-----------|
 | `saml_exporter_build_info`    | Build info SAML exporter            | `Gauge` | `"branch", "goversion", "revision", "revision"` |
-| `http_client_request_total`    | HTTP client request                      | `Counter` | `"host", "code", "method"` |
-| `saml_metadata_error_total`   | Errors encountered while parsing SAML metadata | `Counter` | `"url"` |
-| `saml_x509_read_error_total`  | Errors encountered while parsing SAML X509 certificates  | `Counter` | `"entityid", "use"` |
-| `saml_x509_cert_not_after` | SAML X509 certificate expiration date  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
-| `saml_x509_cert_not_before` | SAML X509 certificate not valid before  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
+| `http_client_requests_total`    | HTTP client request                      | `Counter` | `"host", "code", "method"` |
+| `saml_metadata_errors_total`   | Errors encountered while parsing SAML metadata | `Counter` | `"url"` |
+| `saml_x509_read_errors_total`  | Errors encountered while parsing SAML X509 certificates  | `Counter` | `"entityid", "use"` |
+| `saml_x509_cert_not_valid_after` | SAML X509 certificate expiration date  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
+| `saml_x509_cert_not_valid_before` | SAML X509 certificate not valid before  | `Gauge` | `"entityid", "use", "serial_number", "issuer_C", "issuer_CN", "issuer_L", "issuer_O", "issuer_ST", "subject_C", "subject_CN", "subject_L", "subject_O"` |
 
 ## Grafana dashboard
 

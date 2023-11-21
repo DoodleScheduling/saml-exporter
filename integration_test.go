@@ -35,8 +35,8 @@ func TestMain(t *testing.T) {
 			name:  "integration test using kristophjunge/test-saml-idp",
 			image: "kristophjunge/test-saml-idp:latest",
 			expectedMetrics: map[string]int{
-				"http_client_request_total": 1,
-				"saml_x509_cert_not_after":  2,
+				"http_client_requests_total":     1,
+				"saml_x509_cert_not_valid_after": 2,
 			},
 		},
 	}
