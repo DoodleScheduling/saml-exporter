@@ -14,7 +14,7 @@ spec:
     - /bin/sh
     - "-c"
     - |
-      curl --fail -vvv http://saml-exporter/metrics | grep 'saml_x509_cert_not_after'
+      curl --fail -vvv http://saml-exporter/metrics | grep 'saml_x509_cert_not_valid_after'
     resources: {}
     securityContext:
       allowPrivilegeEscalation: false
