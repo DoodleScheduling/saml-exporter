@@ -32,7 +32,7 @@ spec:
     rules:
     {{- if .Values.prometheusRule.alertOnReadErrors }}
     - alert: '{{ printf "%s%s" $rulePrefix "X509CertificateReadErrors" | trim }}'
-      expr: delta(saml_x509_read_error_total[15m]) > 0
+      expr: delta(saml_x509_read_errors_total[15m]) > 0
       for: 5m
       labels:
         severity: {{ .Values.prometheusRule.readErrorsSeverity }}
@@ -48,7 +48,7 @@ spec:
     {{- end }}
     {{- if .Values.prometheusRule.alertOnMetadataErrors }}
     - alert: '{{ printf "%s%s" $rulePrefix "MetadataError" | trim }}'
-      expr: delta(saml_metadata_error_total[15m]) > 0
+      expr: delta(saml_metadata_errors_total[15m]) > 0
       for: 5m
       labels:
         severity: {{ .Values.prometheusRule.metadataErrorsSeverity }}
@@ -63,7 +63,7 @@ spec:
         {{- end }}
     {{- end }}
     - alert: '{{ printf "%s%s" $rulePrefix "X509CertificateRenewal" | trim }}'
-      expr: count(saml_x509_cert_not_after) by (entityid, use) - count(((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.warningDaysLeft }}) by (entityid, use) == 0
+      expr: count(saml_x509_cert_not_valid_after) by (entityid, use) - count(((saml_x509_cert_not_valid_after - time()) / 86400) < {{ .Values.prometheusRule.warningDaysLeft }}) by (entityid, use) == 0
       for: 15m
       labels:
         severity: {{ .Values.prometheusRule.certificateRenewalsSeverity }}
@@ -77,7 +77,7 @@ spec:
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     - alert: '{{ printf "%s%s" $rulePrefix "X509CertificateExpiration" | trim }}'
-      expr: count(saml_x509_cert_not_after) by (entityid, use) - count(((saml_x509_cert_not_after - time()) / 86400) < {{ .Values.prometheusRule.criticalDaysLeft }}) by (entityid, use) == 0
+      expr: count(saml_x509_cert_not_valid_after) by (entityid, use) - count(((saml_x509_cert_not_valid_after - time()) / 86400) < {{ .Values.prometheusRule.criticalDaysLeft }}) by (entityid, use) == 0
       for: 15m
       labels:
         severity: {{ .Values.prometheusRule.certificateExpirationsSeverity }}
@@ -91,7 +91,7 @@ spec:
         {{- toYaml .Values.prometheusRule.alertExtraAnnotations | nindent 8 }}
         {{- end }}
     - alert: '{{ printf "%s%s" $rulePrefix "UnavailableMetadataEndpoint" | trim }}'
-      expr: sum(rate(http_client_request_total{job="{{ .Values.podMonitor.namespace | default .Values.serviceMonitor.namespace | default .Release.Namespace}}/{{ include "saml-exporter.fullname" . }}", code!~"^2.*"}[5m])) by (host) > 0
+      expr: sum(rate(http_client_requests_total{job="{{ .Values.podMonitor.namespace | default .Values.serviceMonitor.namespace | default .Release.Namespace}}/{{ include "saml-exporter.fullname" . }}", code!~"^2.*"}[5m])) by (host) > 0
       for: 3m
       labels:
         severity: {{ .Values.prometheusRule.unavailableMetadataEndpointSeverity }}
