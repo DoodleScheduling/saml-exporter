@@ -26,14 +26,13 @@ import (
 type Config struct {
 	URL []string `env:"URL"`
 	Log struct {
-		Level    string `env:"LOG_LEVEL"`
-		Encoding string `env:"LOG_ENCODING"`
+		Level    string `env:"LOG_LEVEL, default=info"`
+		Encoding string `env:"LOG_ENCODING, default=json"`
 	}
-
-	Bind        string `env:"BIND"`
-	MetricsPath string `env:"METRICS_PATH"`
-	HealthPath  string `env:"HEALTH_PATH"`
-	UserAgent   string `env:"USER_AGENT"`
+	Bind        string `env:"BIND, default=:9412"`
+	MetricsPath string `env:"METRICS_PATH, default=/metrics"`
+	HealthPath  string `env:"HEALTH_PATH, default=/healthz"`
+	UserAgent   string `env:"USER_AGENT, default=saml-exporter (go-http-client)"`
 }
 
 var (
@@ -43,12 +42,12 @@ var (
 )
 
 func init() {
-	flag.StringVarP(&config.Log.Level, "log-level", "l", "info", "Define the log level (default is warning) [debug,info,warn,error]")
-	flag.StringVarP(&config.Log.Encoding, "log-encoding", "e", "json", "Define the log format (default is json) [json,console]")
-	flag.StringVarP(&config.Bind, "bind", "b", ":9412", "Address to bind http server (default is :9412)")
-	flag.StringVarP(&config.MetricsPath, "metrics-path", "", "/metrics", "Metric path (default is /metrics)")
-	flag.StringVarP(&config.HealthPath, "health-path", "", "/healthz", "Health probe path (default is /healthz)")
-	flag.StringVarP(&config.UserAgent, "user-agent", "", "saml-exporter (go-http-client)", "HTTP client user-agent header")
+	flag.StringVarP(&config.Log.Level, "log-level", "l", "", "Define the log level (default is warning) [debug,info,warn,error]")
+	flag.StringVarP(&config.Log.Encoding, "log-encoding", "e", "", "Define the log format (default is json) [json,console]")
+	flag.StringVarP(&config.Bind, "bind", "b", "", "Address to bind http server (default is :9412)")
+	flag.StringVarP(&config.MetricsPath, "metrics-path", "", "", "Metric path (default is /metrics)")
+	flag.StringVarP(&config.HealthPath, "health-path", "", "", "Health probe path (default is /healthz)")
+	flag.StringVarP(&config.UserAgent, "user-agent", "", "", "HTTP client user-agent header")
 }
 
 func main() {
@@ -61,7 +60,7 @@ func main() {
 
 	logger, err := buildLogger()
 	must(err)
-
+	fmt.Printf("%#v", config)
 	if len(flag.Args()) > 0 {
 		config.URL = flag.Args()
 	}
