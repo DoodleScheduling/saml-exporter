@@ -60,7 +60,6 @@ func main() {
 
 	logger, err := buildLogger()
 	must(err)
-	fmt.Printf("%#v", config)
 	if len(flag.Args()) > 0 {
 		config.URL = flag.Args()
 	}
