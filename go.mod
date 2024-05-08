@@ -9,7 +9,7 @@ require (
 	github.com/prometheus/client_golang v1.17.0
 	github.com/prometheus/client_model v0.5.0
 	github.com/prometheus/common v0.45.0
-	github.com/sethvargo/go-envconfig v0.9.0
+	github.com/sethvargo/go-envconfig v1.0.1
 	github.com/spf13/pflag v1.0.5
 	github.com/testcontainers/testcontainers-go v0.26.0
 	github.com/tj/assert v0.0.3
