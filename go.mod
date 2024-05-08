@@ -1,6 +1,6 @@
 module github.com/doodlescheduling/saml-exporter
 
-go 1.20
+go 1.22
 
 require (
 	github.com/crewjam/saml v0.4.14
