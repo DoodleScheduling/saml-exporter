@@ -8,5 +8,5 @@ commonLabels:
   app: saml-exporter
 
 images:
-- name: doodlescheduling/saml-exporter:latest
+- name: ghcr.io/doodlescheduling/saml-exporter:latest
   newTag: 0.0.1
