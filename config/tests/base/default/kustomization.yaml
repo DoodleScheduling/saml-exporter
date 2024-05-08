@@ -3,3 +3,7 @@ kind: Kustomization
 resources:
 - ../../../base
 - namespace.yaml
+
+images:
+- name: ghcr.io/doodlescheduling/saml-exporter
+  newTag: latest
