@@ -7,7 +7,7 @@ require (
 	github.com/go-logr/logr v1.3.0
 	github.com/go-logr/zapr v1.3.0
 	github.com/prometheus/client_golang v1.17.0
-	github.com/prometheus/client_model v0.5.0
+	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.45.0
 	github.com/sethvargo/go-envconfig v0.9.0
 	github.com/spf13/pflag v1.0.5
@@ -71,6 +71,6 @@ require (
 	golang.org/x/tools v0.7.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20230530153820-e85fd2cbaebc // indirect
 	google.golang.org/grpc v1.57.1 // indirect
-	google.golang.org/protobuf v1.31.0 // indirect
+	google.golang.org/protobuf v1.33.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
