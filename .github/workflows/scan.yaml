@@ -19,7 +19,7 @@ jobs:
         with:
           egress-policy: audit
 
-      - uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Run FOSSA scan and upload build data
         uses: fossa-contrib/fossa-action@cdc5065bcdee31a32e47d4585df72d66e8e941c2 # v3.0.0
         with:
@@ -39,7 +39,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout repository
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: Initialize CodeQL
         uses: github/codeql-action/init@f0a12816612c7306b485a22cb164feb43c6df818 # codeql-bundle-20221020
         with:
