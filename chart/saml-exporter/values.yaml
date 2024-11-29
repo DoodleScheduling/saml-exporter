@@ -169,7 +169,7 @@ grafanaDashboard:
 
 kubeRBACProxy:
   enabled: true
-  image: quay.io/brancz/kube-rbac-proxy:v0.18.1
+  image: quay.io/brancz/kube-rbac-proxy:v0.18.2
   securityContext:
     allowPrivilegeEscalation: false
     capabilities:
