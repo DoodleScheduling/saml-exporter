@@ -10,7 +10,7 @@ require (
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.48.0
 	github.com/sethvargo/go-envconfig v1.1.0
-	github.com/spf13/pflag v1.0.5
+	github.com/spf13/pflag v1.0.6
 	github.com/testcontainers/testcontainers-go v0.35.0
 	github.com/tj/assert v0.0.3
 	go.uber.org/zap v1.27.0
