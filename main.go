@@ -16,8 +16,8 @@ import (
 	"github.com/go-logr/logr"
 	"github.com/go-logr/zapr"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus/collectors/version"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sethvargo/go-envconfig"
 	flag "github.com/spf13/pflag"
 	"go.uber.org/zap"
@@ -83,7 +83,7 @@ func main() {
 	if _, ok := err.(*net.OpError); ok {
 		panic(err)
 	} else {
-	  _, _ = os.Stderr.WriteString(err.Error() + "\n")
+		_, _ = os.Stderr.WriteString(err.Error() + "\n")
 	}
 }
 
