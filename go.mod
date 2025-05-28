@@ -4,7 +4,7 @@ go 1.22.0
 
 require (
 	github.com/crewjam/saml v0.4.14
-	github.com/go-logr/logr v1.4.2
+	github.com/go-logr/logr v1.4.3
 	github.com/go-logr/zapr v1.3.0
 	github.com/prometheus/client_golang v1.19.1
 	github.com/prometheus/client_model v0.6.2
