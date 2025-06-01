@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/static:nonroot@sha256:42d15c647a762d3ce3a67eab394220f5268915d6ddba9006871e16e4698c3a24
+FROM gcr.io/distroless/static:nonroot@sha256:188ddfb9e497f861177352057cb21913d840ecae6c843d39e00d44fa64daa51c
 WORKDIR /
 COPY saml-exporter saml-exporter
 EXPOSE      9412
