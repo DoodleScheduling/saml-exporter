@@ -76,13 +76,13 @@ func (c *Collector) Collect(ch chan<- prometheus.Metric) {
 
 			for _, ssoDescriptor := range entity.IDPSSODescriptors {
 				for _, keyDescriptor := range ssoDescriptor.KeyDescriptors {
-					c.collectExpireMetric(ch, entity, keyDescriptor)
+					c.collectExpireMetric(ch, u, entity, keyDescriptor)
 				}
 			}
 
 			for _, ssoDescriptor := range entity.SPSSODescriptors {
 				for _, keyDescriptor := range ssoDescriptor.KeyDescriptors {
-					c.collectExpireMetric(ch, entity, keyDescriptor)
+					c.collectExpireMetric(ch, u, entity, keyDescriptor)
 				}
 			}
 		}(u)
@@ -104,8 +104,9 @@ func incSAMLParse(ch chan<- prometheus.Metric, url *url.URL) {
 	ch <- metric
 }
 
-func incCertParse(ch chan<- prometheus.Metric, entity *saml.EntityDescriptor, keyDescriptor saml.KeyDescriptor) {
+func incCertParse(ch chan<- prometheus.Metric, url string, entity *saml.EntityDescriptor, keyDescriptor saml.KeyDescriptor) {
 	metric := certParse.With(prometheus.Labels{
+		"url":      url,
 		"entityid": entity.EntityID,
 		"use":      keyDescriptor.Use,
 	})
@@ -114,13 +115,14 @@ func incCertParse(ch chan<- prometheus.Metric, entity *saml.EntityDescriptor, ke
 	ch <- metric
 }
 
-func (c *Collector) collectExpireMetric(ch chan<- prometheus.Metric, entity *saml.EntityDescriptor, keyDescriptor saml.KeyDescriptor) {
+func (c *Collector) collectExpireMetric(ch chan<- prometheus.Metric, url *url.URL, entity *saml.EntityDescriptor, keyDescriptor saml.KeyDescriptor) {
+	u := url.String()
 	for _, x509Cert := range keyDescriptor.KeyInfo.X509Data.X509Certificates {
 		block, _ := pem.Decode([]byte(fmt.Sprintf("-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----", x509Cert.Data)))
 
 		if block == nil {
 			c.logger.Info("found empty pem block", "entityid", entity.EntityID)
-			incCertParse(ch, entity, keyDescriptor)
+			incCertParse(ch, u, entity, keyDescriptor)
 			continue
 		}
 
@@ -128,11 +130,12 @@ func (c *Collector) collectExpireMetric(ch chan<- prometheus.Metric, entity *sam
 
 		if err != nil {
 			c.logger.Error(err, "failed to parse x509 certificate", "entityid", entity.EntityID)
-			incCertParse(ch, entity, keyDescriptor)
+			incCertParse(ch, u, entity, keyDescriptor)
 			continue
 		}
 
 		labels := prometheus.Labels{
+			"url":           u,
 			"entityid":      entity.EntityID,
 			"use":           keyDescriptor.Use,
 			"serial_number": cert.SerialNumber.String(),
