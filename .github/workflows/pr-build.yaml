@@ -51,7 +51,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
-          go-version: 1.22.3
+          go-version: 1.25.4
       - name: fmt
         run: make fmt
       - name: vet
@@ -81,7 +81,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00 # v6.0.0
         with:
-          go-version: 1.22.3
+          go-version: 1.25.4
       - name: Run tests
         run: make test
       - name: Build binary
