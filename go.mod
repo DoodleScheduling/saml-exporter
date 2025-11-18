@@ -11,7 +11,7 @@ require (
 	github.com/prometheus/common v0.48.0
 	github.com/sethvargo/go-envconfig v1.3.0
 	github.com/spf13/pflag v1.0.10
-	github.com/testcontainers/testcontainers-go v0.35.0
+	github.com/testcontainers/testcontainers-go v0.40.0
 	github.com/tj/assert v0.0.3
 	go.uber.org/zap v1.27.0
 )
