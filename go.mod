@@ -6,7 +6,7 @@ require (
 	github.com/crewjam/saml v0.5.1
 	github.com/go-logr/logr v1.4.3
 	github.com/go-logr/zapr v1.3.0
-	github.com/prometheus/client_golang v1.19.1
+	github.com/prometheus/client_golang v1.23.2
 	github.com/prometheus/client_model v0.6.2
 	github.com/prometheus/common v0.48.0
 	github.com/sethvargo/go-envconfig v1.3.0
