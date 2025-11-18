@@ -83,7 +83,7 @@ func main() {
 	if _, ok := err.(*net.OpError); ok {
 		panic(err)
 	} else {
-		os.Stderr.WriteString(err.Error() + "\n")
+		_, _ = os.Stderr.WriteString(err.Error() + "\n")
 	}
 }
 

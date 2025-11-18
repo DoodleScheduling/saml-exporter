@@ -731,6 +731,7 @@
                 "Value",
                 "entityid",
                 "serial_number",
+                "url",
                 "use"
               ],
               "pattern": "^(subject_CN|Value)$"
@@ -744,6 +745,7 @@
             "indexByName": {
               "Value": 4,
               "entityid": 0,
+              "url": 5,
               "serial_number": 2,
               "subject_CN": 1,
               "use": 3

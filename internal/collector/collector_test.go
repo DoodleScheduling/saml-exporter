@@ -87,13 +87,13 @@ func TestInitializeMetrics(t *testing.T) {
 			expected: `
 			# HELP saml_x509_cert_not_valid_after SAML X509 certificate expiration date
 			# TYPE saml_x509_cert_not_valid_after gauge
-			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.280430694e+09
-			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",url="//saml-metadata",use="signing"} 1.280430694e+09
+			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.280879777e+09
 			
 			# HELP saml_x509_cert_not_valid_before SAML X509 certificate validity period start
 			# TYPE saml_x509_cert_not_valid_before gauge
-			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.162494694e+09
-			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
+			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",url="//saml-metadata",use="signing"} 1.162494694e+09
+			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.162943777e+09
 			`,
 		},
 		{
@@ -157,13 +157,13 @@ func TestInitializeMetrics(t *testing.T) {
 			expected: `
 			# HELP saml_x509_cert_not_valid_after SAML X509 certificate expiration date
 			# TYPE saml_x509_cert_not_valid_after gauge
-			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.280430694e+09
-			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",url="//saml-metadata",use="signing"} 1.280430694e+09
+			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.280879777e+09
 			
 			# HELP saml_x509_cert_not_valid_before SAML X509 certificate validity period start
 			# TYPE saml_x509_cert_not_valid_before gauge
-			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",use="signing"} 1.162494694e+09
-			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
+			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1674",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="siroe.com",url="//saml-metadata",use="signing"} 1.162494694e+09
+			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.162943777e+09
 			`,
 		},
 		{
@@ -215,15 +215,15 @@ func TestInitializeMetrics(t *testing.T) {
 			expected: `
 			# HELP saml_x509_cert_not_valid_after SAML X509 certificate expiration date
 			# TYPE saml_x509_cert_not_valid_after gauge
-			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.280879777e+09
+			saml_x509_cert_not_valid_after{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.280879777e+09
 
 			# HELP saml_x509_cert_not_valid_before SAML X509 certificate validity period start
 			# TYPE saml_x509_cert_not_valid_before gauge
-			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",use="encryption"} 1.162943777e+09
+			saml_x509_cert_not_valid_before{entityid="example-entity-id",issuer_C="US",issuer_CN="Certificate Manager",issuer_L="Santa Clara",issuer_O="Sun Microsystems Inc.",issuer_ST="",serial_number="1679",subject_C="",subject_CN="loadbalancer-9.siroe.com",subject_L="",subject_O="",url="//saml-metadata",use="encryption"} 1.162943777e+09
 
 			# HELP saml_x509_read_errors_total Errors encountered while parsing SAML X509 certificates
 			# TYPE saml_x509_read_errors_total counter
-			saml_x509_read_errors_total{entityid="example-entity-id",use="signing"} 1
+			saml_x509_read_errors_total{entityid="example-entity-id",url="//saml-metadata",use="signing"} 1
 			`,
 		},
 		{
@@ -252,7 +252,7 @@ func TestInitializeMetrics(t *testing.T) {
 			expected: `
 			# HELP saml_x509_read_errors_total Errors encountered while parsing SAML X509 certificates
 			# TYPE saml_x509_read_errors_total counter
-			saml_x509_read_errors_total{entityid="example-entity-id",use="signing"} 1
+			saml_x509_read_errors_total{entityid="example-entity-id",url="//saml-metadata",use="signing"} 1
 			`,
 		},
 		{
